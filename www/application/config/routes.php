@@ -40,9 +40,11 @@
 |
 */
 
-$route['default_controller'] = "info";
+$route['default_controller'] = "topic";
 $route['scaffolding_trigger'] = "";
 
+$route['view'] = "topic/view";
+$route['(:any)'] = "topic/view/$1";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */
