@@ -7,7 +7,7 @@ class Topic extends Controller {
 
 		$this->load->model('Topic_model', 'topic');
 
-		//$this->output->enable_profiler(TRUE);      
+		$this->output->enable_profiler(TRUE);      
 
 	}
 
@@ -17,9 +17,9 @@ class Topic extends Controller {
 
 	}
 
-	function view($url = NULL) {
+	function view($url = NULL, $page = 1) {
 		
-		$view['data'] = $this->topic->get_by_url($url);
+		$view['data'] = $this->topic->get_by_url($url, $page);
 		echo '<pre>';
 		print_r($view['data']);
 		echo '</pre>';

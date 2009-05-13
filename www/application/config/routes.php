@@ -43,6 +43,8 @@
 $route['default_controller'] = "topic";
 $route['scaffolding_trigger'] = "";
 
+$route['info'] = "info";
+$route['info/(:any)'] = "info/$1";
 $route['view'] = "topic/view";
 $route['(:any)'] = "topic/view/$1";
 
