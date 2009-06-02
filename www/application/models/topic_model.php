@@ -68,11 +68,12 @@ class Topic_model extends Model {
 				
 				$template = $this->_get_template($row['id']);
 				if(!$this->max_level AND $template['child_level']) $this->max_level = $template['child_level'];
+				$data['template_name'] = $template['name'];
 				$data['template_file'] = $template['template_file'];
 				
 				if(!in_array('level', $hide_fields)) $data['level'] = $level;
 				if(!in_array('parents', $hide_fields)) $data['parents'] = $this->_get_parent($row['parent_id']);
-				if(!in_array('childs', $hide_fields)) $data['childs'] = $this->_get_child($row['id'], $level, $template['child_level'], $template['child_sort_order']);
+				if(!in_array('childs', $hide_fields)) $data['childs'] = $this->_get_child($row['id'], $level, $template['child_count'], $template['child_sort_order']);
 				 
 				unset($data['child_level']);
 			}
@@ -130,7 +131,7 @@ class Topic_model extends Model {
 
 	function _get_template($topic_id) {
 
-		$this->db->select('templates.template_file, templates.child_sort_order, templates.child_count, templates.child_level');
+		$this->db->select('templates.name, templates.template_file, templates.child_sort_order, templates.child_count, templates.child_level');
 		$this->db->from('templates');
 		$this->db->join('topics_templates', 'topics_templates.template_id = templates.id');
 		$this->db->where('topics_templates.topic_id', $topic_id);
