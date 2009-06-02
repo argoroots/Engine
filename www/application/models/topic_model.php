@@ -93,9 +93,17 @@ class Topic_model extends Model {
 
 		if($level < $this->max_level OR !$this->max_level) {
 		
+			$sort = array(
+				'DATE' => 'topics.edit_time',
+				'DATE_DESC' => 'topics.edit_time DESC',
+				'ORDINAR' => 'topics.ordinar',
+				'ORDINAR_DESC' => 'topics.ordinar DESC',
+			);
+		
 			$this->db->select('id');
 			$this->db->from('topics');
 			$this->db->where('parent_topic_id', $parent_id);
+			if($order) $this->db->order_by($sort[$order]);
 			if($limit) $this->db->limit($limit, ($limit*($this->page-1)));
 			$query = $this->db->get();
 
