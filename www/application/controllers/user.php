@@ -114,11 +114,11 @@ class User extends Controller {
 	
 	function activate($key = NULL) {
 		
-		if(strlen($key) != 32) redirect();
+		if(strlen($key) != 32) redirect('error');
 		
 		$user = $this->Users->get_by_key($key);
 		
-		if(!is_array($user)) redirect();
+		if(!is_array($user)) redirect('error');
 		
 		$user_activation = $this->session->userdata('user_activation');
 		$user_activation['key'] = $key;
@@ -173,7 +173,7 @@ class User extends Controller {
 					$user_activation = $this->session->userdata('user_activation');
 					$this->session->unset_userdata('user_activation');
 					if($user_activation) {
-						if($this->Users->activate($user_activation['user_id'], $user_activation['key'], $user_id) == FALSE) redirect();
+						if($this->Users->activate($user_activation['user_id'], $user_activation['key'], $user_id) == FALSE) redirect('error');
 						if(isset($user_activation['username'])) $this->Users->change_name($user_activation['user_id'], $user_activation['username']);
 					}
 					

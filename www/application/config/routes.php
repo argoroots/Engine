@@ -44,6 +44,8 @@ $route['default_controller'] = "topic/view/uudised";
 $route['scaffolding_trigger'] = "";
 
 //$route['info'] = "info";
+$route['error'] = "error";
+$route['error/(:any)'] = "error/index/$1";
 $route['user/(:any)'] = "user/$1";
 $route['xxx/(:any)'] = "xxx/$1";
 $route['(:any)'] = "topic/view/$1";

@@ -36,6 +36,9 @@ class Topic extends Controller {
 		//print_r($topic);
 		
 		if($topic) {
+			
+			if(!$topic['template_file']) redirect('error');
+			
 			$view['topic'] = $topic;
 			$view['last_topics'] = $this->Topics->get_recent_topics($lasttopics);
 			//$view['site_statistics'] = $this->Users->get_count();
@@ -45,9 +48,7 @@ class Topic extends Controller {
 			$view['page_title'] = $topic['name'];
 			$view['page_menu_selected'] = $topic['menu_selected'];
 		} else {
-			$template = 'error';
-			$view['page_title'] = 'ERROR';
-			$view['page_menu_selected'] = '';
+			redirect('error');
 		}
 		
 		$view['page_content'] = $this->load->view($template, $view, TRUE);
