@@ -77,9 +77,8 @@ class Xxx extends Controller {
 		$this->db->select('pun_users.id');
 		$this->db->select('e_migration.e_id group_id');
 		$this->db->select('pun_users.username');
-		$this->db->select('pun_users.password');
-		$this->db->select('IFNULL(pun_users.salt, \'\') salt', FALSE);
 		$this->db->select('pun_users.email');
+		$this->db->select('IFNULL(pun_users.realname, \'\') realname', FALSE);
 		$this->db->select('pun_users.registered');
 		$this->db->select('pun_users.last_visit');
 		$this->db->from('pun_users');
@@ -92,9 +91,8 @@ class Xxx extends Controller {
 				$this->db->set('create_time', (int) $row->registered);
 				$this->db->set('group_id', (int) $row->group_id);
 				$this->db->set('username', $row->username);
-				$this->db->set('password', $row->password);
-				$this->db->set('salt', $row->salt);
 				$this->db->set('email', $row->email);
+				$this->db->set('name', $row->realname);
 				$this->db->set('last_visit_time', (int) $row->last_visit);
 				$this->db->insert('e_users');
 				$newid = $this->db->insert_id();
