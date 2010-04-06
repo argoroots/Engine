@@ -1,0 +1,9 @@
+a.linkbutton {
+	padding: 0px 3px 3px 15px;
+}
+
+a.linkbutton  img{
+	position: relative;
+	top: 3px;
+	padding-left: 10px;
+}

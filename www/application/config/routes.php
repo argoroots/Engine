@@ -40,12 +40,12 @@
 |
 */
 
-$route['default_controller'] = "topic";
+$route['default_controller'] = "topic/view/uudised";
 $route['scaffolding_trigger'] = "";
 
-$route['info'] = "info";
-$route['info/(:any)'] = "info/$1";
-$route['view'] = "topic/view";
+//$route['info'] = "info";
+$route['user/(:any)'] = "user/$1";
+$route['xxx/(:any)'] = "xxx/$1";
 $route['(:any)'] = "topic/view/$1";
 
 /* End of file routes.php */

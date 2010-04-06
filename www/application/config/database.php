@@ -37,19 +37,18 @@
 $active_group = "default";
 $active_record = TRUE;
 
-$db['default']['hostname'] = "d1647.mysql.zone.ee";
-$db['default']['username'] = "d1647sa29445";
-$db['default']['password'] = "Arx123";
-$db['default']['database'] = "d1647sd21868";
+$db['default']['hostname'] = "d10160.mysql.zone.ee";
+$db['default']['username'] = "d10160sa12908";
+$db['default']['password'] = "RB2nh6";
+$db['default']['database'] = "d10160sd7727";
 $db['default']['dbdriver'] = "mysql";
-$db['default']['dbprefix'] = "";
+$db['default']['dbprefix'] = "e_";
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;
 $db['default']['cache_on'] = FALSE;
 $db['default']['cachedir'] = "";
 $db['default']['char_set'] = "utf8";
 $db['default']['dbcollat'] = "utf8_general_ci";
-
 
 /* End of file database.php */
 /* Location: ./system/application/config/database.php */
