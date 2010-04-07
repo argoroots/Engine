@@ -4,15 +4,17 @@ class Xxx extends Controller {
 	
 	var $parents = array();
 
-	var $time = 0;
-
 	function __construct() {
 		parent::Controller();
+		
+		//exit('EEIIIIIIII');
 		
 		set_time_limit(1600);
 		ini_set("memory_limit","192M");
 		
-		$this->time = time();
+		if(!$this->session->userdata('xxx_time')) $this->session->set_userdata('xxx_time', time());
+		
+		$this->db->save_queries = FALSE;
 		
 		//$this->output->enable_profiler(TRUE);
 		
@@ -50,9 +52,6 @@ class Xxx extends Controller {
 		
 	function s1() { // users
 		
-		//exit('EEIIIIIIII');
-		
-		$this->load->database('xxx');
 		
 		//groups
 		$this->db->select('g_id AS id');
@@ -110,10 +109,6 @@ class Xxx extends Controller {
 	
 	function s2() { // Avatars
 		
-		//exit('EEIIIIIIII');
-		
-		$this->load->database('xxx');
-		
 		$this->db->select('e_migration.e_id');
 		$this->db->select('e_migration.pun_id');
 		$this->db->from('e_migration');
@@ -142,11 +137,7 @@ class Xxx extends Controller {
 	
 	function s3() { // forum structure
 		
-		//exit('EEIIIIIIII');
-		
-		$this->load->database('xxx');
-		
-		$this->db->simple_query('INSERT INTO e_topics (id, parent_topic_id, template_id, url) VALUES(1, 0, 1, \'emug\');');
+		$this->db->simple_query('INSERT INTO e_topics (id, parent_topic_id, template_id, url) VALUES(1, 0, 1, \'startpage\');');
 		$this->db->simple_query('INSERT INTO e_topics (id, parent_topic_id, template_id, url) VALUES(2, 1, 2, \'uudised\');');
 		$this->db->simple_query('INSERT INTO e_topics (id, parent_topic_id, template_id, url) VALUES(3, 1, 3, \'foorum\');');
 		$this->db->simple_query('INSERT INTO e_topics (id, parent_topic_id, template_id, url) VALUES(4, 1, 4, \'wiki\');');
@@ -169,7 +160,7 @@ class Xxx extends Controller {
 			foreach($query->result() as $row) {
 				$this->db->set('parent_topic_id', 3);
 				$this->db->set('template_id', 6);
-				$this->db->set('url', 'kategooria-'. $row->id);
+				$this->db->set('url', $this->_url($row->cat_name));
 				$this->db->insert('e_topics');
 				$newid = $this->db->insert_id();
 				
@@ -198,9 +189,10 @@ class Xxx extends Controller {
 		$query = $this->db->get();
 		if($query->num_rows() > 0) {
 			foreach($query->result() as $row) {
+				$url = $this->_url($row->forum_name);
 				$this->db->set('parent_topic_id', (int) $row->e_id);
 				$this->db->set('template_id', 7);
-				$this->db->set('url', 'foorum-'. $row->id);
+				$this->db->set('url', $url);
 				$this->db->insert('e_topics');
 				$newid = $this->db->insert_id();
 				
@@ -238,10 +230,6 @@ class Xxx extends Controller {
 	
 	function s4() { // topics
 		
-		//exit('EEIIIIIIII');
-		
-		$this->load->database('xxx');
-		
 		$this->db->select('pun_topics.id');
 		$this->db->select('pun_topics.subject');
 		$this->db->select('pun_posts.message');
@@ -253,15 +241,14 @@ class Xxx extends Controller {
 		$this->db->join('pun_posts', 'pun_posts.id = pun_topics.first_post_id');
 		$this->db->join('e_migration', 'e_migration.pun_id = pun_topics.forum_id AND e_migration.type = \'forum\'');
 		$this->db->join('e_migration AS user', 'user.pun_id = pun_posts.poster_id AND user.type = \'user\'');
-		$this->db->order_by('e_migration.e_id');
-		$this->db->order_by('pun_topics.id');
+		$this->db->order_by('pun_topics.posted');
 		$query = $this->db->get();
 		if($query->num_rows() > 0) {
 			foreach($query->result() as $row) {
 				$this->db->set('create_time', (int) $row->posted);
-				$this->db->set('parent_topic_id', $row->e_id);
+				$this->db->set('parent_topic_id', (int) $row->e_id);
 				$this->db->set('template_id', 8);
-				$this->db->set('url', 'teema-'. $row->id);
+				$this->db->set('url', 'topic-'. $row->id);
 				$this->db->insert('e_topics');
 				$newid = $this->db->insert_id();
 				
@@ -287,10 +274,6 @@ class Xxx extends Controller {
 	
 	function s5() { // posts
 		
-		//exit('EEIIIIIIII');
-		
-		$this->load->database('xxx');
-		
 		$this->db->select('pun_posts.id');
 		$this->db->select('pun_topics.subject');
 		$this->db->select('pun_posts.message');
@@ -309,9 +292,9 @@ class Xxx extends Controller {
 		if($query->num_rows() > 0) {
 			foreach($query->result() as $row) {
 				$this->db->set('create_time', (int) $row->posted);
-				$this->db->set('parent_topic_id', $row->e_id);
+				$this->db->set('parent_topic_id', (int) $row->e_id);
 				$this->db->set('template_id', 9);
-				$this->db->set('url', 'vastus-'. $row->id);
+				$this->db->set('url', 'post-'. $row->id);
 				$this->db->insert('e_topics');
 				$newid = $this->db->insert_id();
 				
@@ -341,10 +324,6 @@ class Xxx extends Controller {
 	
 	function s6() { // set topics paths
 		
-		//exit('EEIIIIIIII');
-		
-		$this->load->database('xxx');
-		
 		$this->db->distinct();
 		$this->db->select('parent_topic_id');
 		$this->db->from('e_topics');
@@ -361,12 +340,24 @@ class Xxx extends Controller {
 			}
 		}
 		
-		echo 'All done ('. round((time() - $this->time) / 60, 2) .' min)!';
+		header('Location: '. site_url('xxx/s7'));
+		//echo '<a href="'. site_url('xxx/s7') .'">Set topics urls</a>';
 	}
 	
-	function _set_parents($topic_id) {
+	function s7() { // set urls
 		
-		$this->load->database('xxx');
+		$this->db->simple_query('UPDATE e_topics SET url = CONCAT(\'teema-\', id) WHERE id IN (SELECT e_id FROM e_migration WHERE type = \'topic\');');
+		$this->db->simple_query('UPDATE e_topics SET url = CONCAT(\'teema-\', parent_topic_id, \'#\', id) WHERE id IN (SELECT e_id FROM e_migration WHERE type = \'post\');');
+		
+		$time = round((time() - $this->session->userdata('xxx_time')) / 60);
+		$this->session->unset_userdata('xxx_time');
+		echo 'All done ('. $time .' min)!';
+	}
+	
+	
+	
+	
+	function _set_parents($topic_id) {
 		
 		$this->db->select('id');
 		$this->db->select('parent_topic_id');
@@ -384,4 +375,34 @@ class Xxx extends Controller {
 		
 	}
 	
+	function _url($name) {
+		
+		$url = strtolower(url_title($name));
+		
+		$key_ok = FALSE;
+		$url2 = $url;
+		
+		while($key_ok == FALSE) {
+			$this->db->select('COUNT(*) AS rows');
+			$this->db->from('e_topics');
+			$this->db->where('url', $url2);
+			$this->db->limit(1);
+			
+			$query = $this->db->get();
+			
+			if($query->num_rows() > 0) {
+				$row = $query->row();
+				if($row->rows == 0) {
+					$key_ok = TRUE;
+				} else {
+					$url2 = $url .'-'. ($row->rows + 1);
+				}
+			}
+		}
+		
+		
+		return $url2;
+		
+	}
+
 }

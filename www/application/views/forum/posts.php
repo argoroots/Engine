@@ -33,7 +33,7 @@
 	<?php if($this->sess->is_guest) { ?>
 		<span style="padding:25px; text-align:center; display:block;font-weight:bold;"> Postitamiseks pead olema <a href="<?= site_url('user/login'); ?>">sisse loginud</a>.</span>
 	<?php } elseif($topic['rights']['add_child'] != 1) { ?>
-		<span style="padding:25px; text-align:center; display:block;font-weight:bold;"> Sul pole õigust siia teemasse postitada.</span>
+		<span style="padding:25px; text-align:center; display:block;"> Sul pole õigust siia teemasse postitada.</span>
 	<?php } else { ?>
 		<img class="postavatar" src="<?= site_url(avatar($this->sess->user_id)); ?>" width="72" height="72" alt="" />
 		<b><?= $this->sess->username; ?>:</b><br /><br />
